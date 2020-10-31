@@ -3,8 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Chat.iml" filepath="$PROJECT_DIR$/Chat.iml" />
-      <module fileurl="file://$PROJECT_DIR$/client/client.iml" filepath="$PROJECT_DIR$/client/client.iml" />
-      <module fileurl="file://$PROJECT_DIR$/server/server.iml" filepath="$PROJECT_DIR$/server/server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NetworkClient/NetworkClient.iml" filepath="$PROJECT_DIR$/NetworkClient/NetworkClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NetworkClientServer/NetworkClientServer.iml" filepath="$PROJECT_DIR$/NetworkClientServer/NetworkClientServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NetworkServer/NetworkServer.iml" filepath="$PROJECT_DIR$/NetworkServer/NetworkServer.iml" />
     </modules>
   </component>
 </project>
