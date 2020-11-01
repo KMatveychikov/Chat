@@ -79,6 +79,7 @@ public class Network {
             @Override
             public void run() {
                 try {
+
                     while (true) {
                         String message = inputStream.readUTF();
                         if (message.startsWith(CLIENT_MSG_CMD_PREFIX)) {
@@ -86,13 +87,23 @@ public class Network {
                             String sender = parts[1];
                             String msgBody = parts[2];
                             Platform.runLater(() -> {
-                                viewController.appendMessage(String.format("%s: %s", sender, msgBody));
+                                try {
+                                    viewController.appendMessage(String.format("%s: %s", sender, msgBody));
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             });
                         }
                         else if (message.startsWith(SERVER_MSG_CMD_PREFIX)) {
                             String[] parts = message.split("\\s+", 2);
                             Platform.runLater(() -> {
-                                viewController.appendMessage(parts[1]);
+                                try {
+
+                                    viewController.appendMessage(parts[1]);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             });
                         }
                         else {

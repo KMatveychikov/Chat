@@ -92,5 +92,6 @@ public class NetworkChatClient extends Application {
         primaryStage.show();
         primaryStage.setTitle(network.getUsername());
         network.waitMessages(viewController);
+        viewController.getHistory();
     }
 }

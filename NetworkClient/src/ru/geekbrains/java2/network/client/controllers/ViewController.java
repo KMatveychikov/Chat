@@ -1,23 +1,22 @@
 package ru.geekbrains.java2.network.client.controllers;
 
-import javafx.collections.FXCollections;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+
 import ru.geekbrains.java2.network.client.NetworkChatClient;
 import ru.geekbrains.java2.network.client.models.Network;
 
-import java.io.IOException;
+import java.io.*;
 import java.text.DateFormat;
-import java.util.ArrayList;
+
 import java.util.Date;
-import java.util.List;
+
 
 public class ViewController {
 
     @FXML
     public ListView<String> usersList;
-
     @FXML
     private Button sendButton;
     @FXML
@@ -32,14 +31,26 @@ public class ViewController {
     public void initialize() {
 
 
-        sendButton.setOnAction(event -> sendMessage());
-        textField.setOnAction(event -> sendMessage());
+        sendButton.setOnAction(event -> {
+            try {
+                sendMessage();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        textField.setOnAction(event -> {
+            try {
+                sendMessage();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
 
 
     }
 
-    private void sendMessage() {
+    private void sendMessage() throws IOException {
         String message = textField.getText();
         appendMessage("Я: " + message);
         textField.clear();
@@ -62,14 +73,36 @@ public class ViewController {
         this.network = network;
     }
 
-    public void appendMessage(String message) {
+    public void appendMessage(String message) throws IOException {
         String timestamp = DateFormat.getInstance().format(new Date());
-        chatHistory.appendText(timestamp);
-        chatHistory.appendText(System.lineSeparator());
-        chatHistory.appendText(message);
-        chatHistory.appendText(System.lineSeparator());
-        chatHistory.appendText(System.lineSeparator());
+        chatHistory.appendText(timestamp+":"+message + "\n");
+        appendHistory(message);
+
     }
+    public void appendHistory(String message) throws IOException {
+        String timestamp = DateFormat.getInstance().format(new Date());
+        try (FileWriter out = new FileWriter("NetworkClient/history.txt", true)) {
+            out.write(timestamp + ": " + message + "\n");
+            out.flush();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+   public  void getHistory(){
+
+       try (BufferedReader bufferedReader = new BufferedReader(new FileReader("NetworkClient/history.txt"))) {
+
+           
+           while (bufferedReader.read() != -1) {
+               chatHistory.appendText(bufferedReader.readLine()+"\n");
+           }
+       } catch (IOException e) {
+           e.printStackTrace();
+       }
+   }
+
+
 
     public void showError(String title, String message) {
         NetworkChatClient.showNetworkError(message, title);
