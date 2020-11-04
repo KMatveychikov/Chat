@@ -18,7 +18,7 @@ public class Network {
     private static final String SERVER_MSG_CMD_PREFIX = "/serverMsg";
 
     private static final String SERVER_ADDRESS = "localhost";
-    private static final int SERVER_PORT = 8190;
+    private static final int SERVER_PORT = 8191;
 
     private final String host;
     private final int port;

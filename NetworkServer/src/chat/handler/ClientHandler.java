@@ -1,13 +1,12 @@
 package chat.handler;
-
 import chat.MyServer;
-import chat.auth.AuthService;
 import chat.auth.BaseAuthService;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientHandler {
 
@@ -32,24 +31,42 @@ public class ClientHandler {
         this.clientSocket = clientSocket;
     }
 
+    public void newUserThread(){
+        try {
+            authentication();
+            readMessages();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                closeConnection();
+            } catch (IOException e) {
+                System.err.println("Failed to close connection!");
+            }
+        }
+    }
+
+
     public void handle() throws IOException {
         in  = new DataInputStream(clientSocket.getInputStream());
         out = new DataOutputStream(clientSocket.getOutputStream());
-
-        new Thread(() -> {
-            try {
-                authentication();
-                readMessages();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    closeConnection();
-                } catch (IOException e) {
-                    System.err.println("Failed to close connection!");
-                }
-            }
-        }).start();
+        ExecutorService userThread = Executors.newCachedThreadPool();
+        userThread.execute(this::newUserThread);
+        userThread.shutdown();
+//        new Thread(() -> {
+//            try {
+//                authentication();
+//                readMessages();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            } finally {
+//                try {
+//                    closeConnection();
+//                } catch (IOException e) {
+//                    System.err.println("Failed to close connection!");
+//                }
+//            }
+//        }).start();
     }
 
     public String getUsername() {
